@@ -282,6 +282,23 @@
           <input type="text" name="zip-code" id="zip-field" required />
         </div>
         <div class="error-msg" id="zip-error"></div>
+        <div class="user-input">
+          <label for="password-field">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password-field"
+            required
+            minlength="8"
+          />
+        </div>
+        <div class="error-msg" id="password-error">
+          Please include:
+          <p id="uppercase">At least one uppercase letter</p>
+          <p id="lowercase">At least one lowercase letter</p>
+          <p id="digit">At least one digit</p>
+          <p id="characters">At least 8 characters long</p>
+        </div>
         <button type="submit">Submit</button>
       </form>
     </div>

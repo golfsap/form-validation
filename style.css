@@ -58,3 +58,7 @@ input:valid {
 .error-msg.no-error {
   color: green;
 }
+
+#password-error .no-error {
+  color: green;
+}
