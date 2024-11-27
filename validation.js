@@ -179,7 +179,7 @@ const handleSubmit = (e) => {
     passwordField.checkValidity() &&
     confirmPwField.checkValidity()
   ) {
-    alert("🙌 High five!");
+    alert("🙌 High five! You completed the form.");
   } else {
     alert("❌ Form incomplete. Low five :(");
   }
