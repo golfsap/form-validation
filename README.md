@@ -4,4 +4,4 @@ A browser form to practice live inline validation using Javascript and the Const
 
 Every field in the form must be filled out correctly, the country chosen will determine the regex for the zip-code field.
 
-[Live demo](golfsap.github.io/form-validation/) or go to: golfsap.github.io/form-validation/
+[Live demo](https://golfsap.github.io/form-validation/) or go to: golfsap.github.io/form-validation/
