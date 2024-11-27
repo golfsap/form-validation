@@ -293,13 +293,23 @@
           />
         </div>
         <div class="error-msg" id="password-error">
-          Please include:
           <p id="uppercase">At least one uppercase letter</p>
           <p id="lowercase">At least one lowercase letter</p>
           <p id="digit">At least one digit</p>
           <p id="characters">At least 8 characters long</p>
         </div>
-        <button type="submit">Submit</button>
+        <div class="user-input">
+          <label for="confirm-password-field">Confirm Password:</label>
+          <input
+            type="password"
+            name="confirm-password"
+            id="confirm-password-field"
+            required
+            minlength="8"
+          />
+        </div>
+        <div class="error-msg" id="confirm-password-error"></div>
+        <button id="submit-btn" type="submit">Submit</button>
       </form>
     </div>
   </body>

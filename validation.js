@@ -5,6 +5,10 @@ const countryErrorField = document.getElementById("country-error");
 const zipField = document.getElementById("zip-field");
 const zipErrorField = document.getElementById("zip-error");
 const passwordField = document.getElementById("password-field");
+const passwordErrorField = document.getElementById("password-error");
+const confirmPwField = document.getElementById("confirm-password-field");
+const confirmPwErrorField = document.getElementById("confirm-password-error");
+const submitBtn = document.getElementById("submit-btn");
 
 const validateEmail = (e) => {
   if (emailField.checkValidity()) {
@@ -26,7 +30,6 @@ const validateCountry = () => {
     return;
   } else {
     countryField.setCustomValidity("");
-    // countryErrorField.classList.add("no-error");
     styleNoError("country");
   }
 };
@@ -36,11 +39,18 @@ const validateZip = () => {
     alert("Please select a country first");
     return;
   }
+
+  if (zipField.validity.valueMissing) {
+    zipErrorField.classList.remove("no-error");
+    zipErrorField.textContent = zipField.validationMessage;
+    return;
+  }
+
   const countryRegex = postalRegex[countryField.value];
   console.log(countryField.value);
 
   // Build constraint checker
-  const constraint = new RegExp(countryRegex, "");
+  const constraint = new RegExp(countryRegex);
   console.log(constraint);
 
   // Check it
@@ -68,7 +78,6 @@ const validateUppercase = () => {
   const uppercaseConstraint = new RegExp("[A-Z]");
   const uppercasePara = document.getElementById("uppercase");
   if (uppercaseConstraint.test(passwordField.value)) {
-    // passwordField.setCustomValidity("");
     uppercasePara.classList.add("no-error");
     uppercasePara.textContent = "✅ At least one uppercase letter";
     console.log("valid");
@@ -85,7 +94,6 @@ const validateLowercase = () => {
   const lowercaseConstraint = new RegExp("[a-z]");
   const lowercasePara = document.getElementById("lowercase");
   if (lowercaseConstraint.test(passwordField.value)) {
-    // passwordField.setCustomValidity("");
     lowercasePara.classList.add("no-error");
     lowercasePara.textContent = "✅ At least one lowercase letter";
     console.log("valid");
@@ -102,7 +110,6 @@ const validateDigit = () => {
   const digitConstraint = new RegExp("[0-9]");
   const digitPara = document.getElementById("digit");
   if (digitConstraint.test(passwordField.value)) {
-    // passwordField.setCustomValidity("");
     digitPara.classList.add("no-error");
     digitPara.textContent = "✅ At least one digit";
     console.log("valid");
@@ -117,7 +124,7 @@ const validateDigit = () => {
 
 const validatePasswordLength = () => {
   const charactersPara = document.getElementById("characters");
-  if (!passwordField.validity.tooShort) {
+  if (passwordField.value.length >= 8) {
     charactersPara.classList.add("no-error");
     charactersPara.textContent = "✅ At least 8 characters long";
     return true;
@@ -145,6 +152,39 @@ const validatePasswordUsingRegex = () => {
   }
 };
 
+const validatePasswordConfirm = () => {
+  if (confirmPwField.validity.valueMissing) {
+    confirmPwErrorField.classList.remove("no-error");
+    confirmPwField.setCustomValidity("Please confirm your password");
+    confirmPwErrorField.textContent = confirmPwField.validationMessage;
+    return;
+  }
+  if (confirmPwField.value === passwordField.value) {
+    confirmPwField.classList.remove("no-error");
+    confirmPwField.setCustomValidity("");
+    styleNoError("confirm-password");
+  } else {
+    confirmPwField.setCustomValidity("Passwords do not match");
+    confirmPwErrorField.classList.remove("no-error");
+    confirmPwErrorField.textContent = confirmPwField.validationMessage;
+  }
+};
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if (
+    emailField.checkValidity() &&
+    countryField.checkValidity() &&
+    zipField.checkValidity() &&
+    passwordField.checkValidity() &&
+    confirmPwField.checkValidity()
+  ) {
+    alert("🙌 High five!");
+  } else {
+    alert("❌ Form incomplete. Low five :(");
+  }
+};
+
 const postalRegex = {};
 
 async function fetchPostalCodeRegex() {
@@ -165,8 +205,18 @@ async function fetchPostalCodeRegex() {
 // Populate the postal code regex object
 fetchPostalCodeRegex();
 
-// Event Listener
+// Event Listeners
 emailField.addEventListener("input", validateEmail);
-countryField.addEventListener("input", validateCountry);
+countryField.addEventListener("input", () => {
+  // Validate zip everytime country changes
+  validateCountry();
+  validateZip();
+});
 zipField.addEventListener("input", validateZip);
-passwordField.addEventListener("input", validatePasswordUsingRegex);
+passwordField.addEventListener("input", () => {
+  // Validate password confirmation everytime password changes
+  validatePasswordUsingRegex();
+  validatePasswordConfirm();
+});
+confirmPwField.addEventListener("input", validatePasswordConfirm);
+submitBtn.addEventListener("click", (e) => handleSubmit(e));
